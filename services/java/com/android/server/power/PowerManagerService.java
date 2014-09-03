@@ -167,6 +167,8 @@ public final class PowerManagerService extends IPowerManager.Stub
     // effectively and terminate the dream.
     private static final int DREAM_BATTERY_LEVEL_DRAIN_CUTOFF = 5;
 
+    private static final int BUTTON_ON_DURATION = 5 * 1000;
+
     private Context mContext;
     private LightsService mLightsService;
     private BatteryService mBatteryService;
@@ -182,6 +184,7 @@ public final class PowerManagerService extends IPowerManager.Stub
     private SettingsObserver mSettingsObserver;
     private DreamManagerService mDreamManager;
     private LightsService.Light mAttentionLight;
+    private LightsService.Light mButtonsLight;
 
     private final Object mLock = new Object();
 
@@ -457,6 +460,7 @@ public final class PowerManagerService extends IPowerManager.Stub
                     mHandler);
             mSettingsObserver = new SettingsObserver(mHandler);
             mAttentionLight = mLightsService.getLight(LightsService.LIGHT_ID_ATTENTION);
+            mButtonsLight = mLightsService.getLight(LightsService.LIGHT_ID_BUTTONS);
 
             // Register for broadcasts from other components of the system.
             IntentFilter filter = new IntentFilter();
@@ -1368,6 +1372,12 @@ public final class PowerManagerService extends IPowerManager.Stub
                     nextTimeout = mLastUserActivityTime
                             + screenOffTimeout - screenDimDuration;
                     if (now < nextTimeout) {
+                        if (now > mLastUserActivityTime + BUTTON_ON_DURATION) {
+                            mButtonsLight.setBrightness(0);
+                        } else {
+                            mButtonsLight.setBrightness(mDisplayPowerRequest.screenBrightness);
+                            nextTimeout = now + BUTTON_ON_DURATION;
+                        }
                         mUserActivitySummary |= USER_ACTIVITY_SCREEN_BRIGHT;
                     } else {
                         nextTimeout = mLastUserActivityTime + screenOffTimeout;

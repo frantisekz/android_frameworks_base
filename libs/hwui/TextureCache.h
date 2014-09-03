@@ -124,7 +124,8 @@ private:
      */
     void generateTexture(SkBitmap* bitmap, Texture* texture, bool regenerate = false);
 
-    void uploadLoFiTexture(bool resize, SkBitmap* bitmap, uint32_t width, uint32_t height);
+    void uploadToTexture(bool resize, bool lofi, GLenum format, GLenum type,
+            SkBitmap* bitmap, uint32_t width, uint32_t height);
     void uploadToTexture(bool resize, GLenum format, GLsizei stride,
             GLsizei width, GLsizei height, GLenum type, const GLvoid * data);
 

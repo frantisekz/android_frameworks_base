@@ -202,6 +202,13 @@ public class MediaRecorder
         public static final int REMOTE_SUBMIX = 8;
 
         /**
+         * FM radio audio source
+         * This is a hidden audio source.
+         * @hide
+         */
+        public static final int FM_RADIO = 9;
+
+        /**
          * Audio source for preemptible, low-priority software hotword detection
          * It presents the same gain and pre processing tuning as {@link #VOICE_RECOGNITION}.
          * <p>
@@ -328,7 +335,7 @@ public class MediaRecorder
      * @see android.media.MediaRecorder.AudioSource
      */
     public static final int getAudioSourceMax() {
-        return AudioSource.REMOTE_SUBMIX;
+        return AudioSource.FM_RADIO;
     }
 
     /**
